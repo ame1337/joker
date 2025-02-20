@@ -28366,7 +28366,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(n === 4 ? 'table-info' : '')
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(n === 4 ? 'Σ' : 9), 1 /* TEXT */), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)([0, 1, 2, 3], function (p) {
       return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
-        innerHTML: n === 8 ? _ctx.showResult(p, 2, n) : _ctx.showScores(p, 2, n)
+        innerHTML: n === 4 ? _ctx.showResult(p, 2, n) : _ctx.showScores(p, 2, n)
       }, null, 8 /* PROPS */, _hoisted_8);
     }), 64 /* STABLE_FRAGMENT */))], 2 /* CLASS */);
   }), 64 /* STABLE_FRAGMENT */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)([0, 1, 2, 3, 4, 5, 6, 7, 8], function (n) {
@@ -28382,7 +28382,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(n === 4 ? 'table-info' : '')
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(n === 4 ? 'Σ' : 9), 1 /* TEXT */), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)([0, 1, 2, 3], function (p) {
       return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
-        innerHTML: n === 8 ? _ctx.showResult(p, 4, n) : _ctx.showScores(p, 4, n)
+        innerHTML: n === 4 ? _ctx.showResult(p, 4, n) : _ctx.showScores(p, 4, n)
       }, null, 8 /* PROPS */, _hoisted_12);
     }), 64 /* STABLE_FRAGMENT */))], 2 /* CLASS */);
   }), 64 /* STABLE_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tfoot", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", _hoisted_13, [_cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
@@ -57216,6 +57216,11 @@ __webpack_require__.r(__webpack_exports__);
         $('#play-table').addClass('d-none');
         $('#chat-wrapper').removeClass('d-none');
         $('.close-w').removeClass('d-none');
+        $('#theme-changer').addClass('d-none');
+        var p = $('.p-bg-fix');
+        if (p.length > 0) {
+          p.addClass('d-none');
+        }
       } else {
         $('#scoreboard').removeClass('d-md-block');
         $('#chat-wrapper').removeClass('d-none');
@@ -57228,6 +57233,11 @@ __webpack_require__.r(__webpack_exports__);
         $('#play-table').addClass('d-none');
         $('#scoreboard').removeClass('d-none');
         $('.close-w').removeClass('d-none');
+        $('#theme-changer').addClass('d-none');
+        var p = $('.p-bg-fix');
+        if (p.length > 0) {
+          p.addClass('d-none');
+        }
       } else {
         $('#chat-wrapper').addClass('d-none');
         $('#scoreboard').addClass('d-md-block');
@@ -57240,6 +57250,11 @@ __webpack_require__.r(__webpack_exports__);
       $('#chat-wrapper').addClass('d-none');
       $('#scoreboard').addClass('d-none');
       $('.close-w').addClass('d-none');
+      $('#theme-changer').removeClass('d-none');
+      var p = $('.p-bg-fix');
+      if (p.length > 0) {
+        p.removeClass('d-none');
+      }
     },
     copyLink: function copyLink() {
       var link = document.getElementById("table-link");

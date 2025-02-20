@@ -15,7 +15,7 @@
         <admin-panel :game-id="{{ $id }}"></admin-panel>
     @endif
 
-    <div class="position-fixed start-0 bottom-0 ms-1 mb-1">
+    <div id="theme-changer" class="position-fixed start-0 bottom-0 ms-1 mb-1">
         <theme-changer></theme-changer>
     </div>
 @endsection

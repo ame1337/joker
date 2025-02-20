@@ -14,7 +14,7 @@
                 </tr>
                 <tr v-for="n in [0,1,2,3,4]" :class="n === 4 ? 'table-info' : ''">
                     <th scope="row">{{ n === 4 ? '&Sigma;' : 9 }}</th>
-                    <td v-for="p in [0,1,2,3]" v-html="n === 8 ? showResult(p , 2, n) : showScores(p , 2, n )"></td>
+                    <td v-for="p in [0,1,2,3]" v-html="n === 4 ? showResult(p , 2, n) : showScores(p , 2, n )"></td>
                 </tr>
                 <tr v-for="n in [0,1,2,3,4,5,6,7,8]" :class="n === 8 ? 'table-info' : ''">
                     <th scope="row">{{ n === 8 ? '&Sigma;' : 8 - n }}</th>
@@ -22,7 +22,7 @@
                 </tr>
                 <tr v-for="n in [0,1,2,3,4]" :class="n === 4 ? 'table-info' : ''">
                     <th scope="row">{{ n === 4 ? '&Sigma;' : 9 }}</th>
-                    <td v-for="p in [0,1,2,3]" v-html="n === 8 ? showResult(p , 4, n) : showScores(p , 4, n )"></td>
+                    <td v-for="p in [0,1,2,3]" v-html="n === 4 ? showResult(p , 4, n) : showScores(p , 4, n )"></td>
                 </tr>
             </tbody>
             <tfoot>

@@ -231,6 +231,11 @@ export default {
                 $('#play-table').addClass('d-none');
                 $('#chat-wrapper').removeClass('d-none');
                 $('.close-w').removeClass('d-none');
+                $('#theme-changer').addClass('d-none');
+                let p = $('.p-bg-fix');
+                if (p.length > 0) {
+                    p.addClass('d-none');
+                }
             } else {
                 $('#scoreboard').removeClass('d-md-block');
                 $('#chat-wrapper').removeClass('d-none');
@@ -244,6 +249,11 @@ export default {
                 $('#play-table').addClass('d-none');
                 $('#scoreboard').removeClass('d-none');
                 $('.close-w').removeClass('d-none');
+                $('#theme-changer').addClass('d-none');
+                let p = $('.p-bg-fix');
+                if (p.length > 0) {
+                    p.addClass('d-none');
+                }
             } else {
                 $('#chat-wrapper').addClass('d-none');
                 $('#scoreboard').addClass('d-md-block');
@@ -257,6 +267,11 @@ export default {
             $('#chat-wrapper').addClass('d-none');
             $('#scoreboard').addClass('d-none');
             $('.close-w').addClass('d-none');
+            $('#theme-changer').removeClass('d-none');
+            let p = $('.p-bg-fix');
+            if (p.length > 0) {
+                p.removeClass('d-none');
+            }
         },
 
         copyLink() {
