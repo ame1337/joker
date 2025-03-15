@@ -49,7 +49,7 @@
                 </a>
                 <ul class="dropdown-menu text-small">
                     <li>
-                        <a class="dropdown-item" href="/user/{{ Auth::id() }}">
+                        <a class="dropdown-item" href="{{ route('profile.edit') }}">
                             <i class="fas fa-user"></i> @lang('Profile')
                         </a>
                     </li>
@@ -59,7 +59,7 @@
                     <li>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                            document.getElementById('logout-form').submit();">
                             <i class="fas fa-sign-out-alt"></i> @lang('Sign out')
                         </a>
                     </li>

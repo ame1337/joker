@@ -49,5 +49,17 @@
     "Password changed": "პაროლი შეიცვალა",
     "Invalid pin code": "პინ კოდი არასწორია",
     "New password": "ახალი პაროლი",
-    "Lobby": "ოთახები"
+    "Lobby": "ოთახები",
+    "Update profile": "პროფილის განახლება",
+    "Update password": "პაროლის განახლება",
+    "Current password": "მიმდინარე პაროლი",
+    "Delete account": "ანგარიშის წაშლა",
+    "DELETE ACCOUNT": "წაშლა",
+    "CANCEL": "არა",
+    "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.": "ანგარიშის გაუქმების შემდეგ, მონაცემები სამუდამოდ წაიშლება. წაშლამდე გთხოვთ გადმოწეროთ თქვენთვის საჭირო ინფორმაცია შესანახად.",
+    "Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account." : "ანგარიშის გაუქმების შემდეგ, მონაცემები სამუდამოდ წაიშლება. გთხოვთ შეიყვანოთ პაროლი დასადასტურებლად რომ გსურთ ანგარიშის წაშლა.",
+    "Are you sure you want to delete your account?": "ნამდვილად გსურთ ანგარიშის წაშლა?",
+    "Your email address is unverified.": "თქვენი ელ-ფოსტა არ არის ვერიფიცირებული",
+    "Click here to re-send the verification email.": "დააჭირეთ აქ ლინკის ახლიდან გამოსაგზავნად",
+    "A new verification link has been sent to your email address.": "ახალი ვერიფიკაციის ლინკი გამოგზავნილია თქვენს ელ-ფოსტაზე"
 }

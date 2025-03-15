@@ -1,13 +1,13 @@
 <template>
-    <div class="alert alert-success alert-flash position-fixed end-0 bottom-0 mb-2 me-2"
-         v-show="show">
+    <div class="alert position-fixed end-0 bottom-0 mb-2 me-2"
+        :class="this.type" v-show="show">
         <i class="fas fa-exclamation-circle"></i> <span v-text="this.message"></span>
     </div>
 </template>
 
 <script>
     export default {
-        props: ['message'],
+        props: ['message', 'type'],
 
         data() {
             return {

@@ -22433,7 +22433,7 @@ readers do not read off random characters that represent icons */
 }
 
 html {
-  overflow: hidden;
+  overflow: auto;
 }
 
 #player0card,

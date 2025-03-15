@@ -182,13 +182,13 @@ class GameTest extends TestCase
             ->assertStatus(403);
     }
 
-    public function when_creator_leaves_it_sets_other_player_as_creator()
+    public function test_when_creator_leaves_it_sets_other_player_as_creator()
     {
         // TODO
         $this->assertTrue(true);
     }
 
-    public function when_creator_leaves_and_no_other_players_left_game_is_deleted()
+    public function test_when_creator_leaves_and_no_other_players_left_game_is_deleted()
     {
         // TODO
         $this->assertTrue(true);

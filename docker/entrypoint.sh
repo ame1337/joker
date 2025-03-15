@@ -15,9 +15,9 @@ mysqld_safe &
 while ! mysqladmin ping -h'localhost' --silent; do echo 'mysqld is down' && sleep .2; done
 
 mysql -u root -e 'CREATE DATABASE IF NOT EXISTS joker;'
-# DB_PASS="$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)"
+DB_PASS="$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)"
 mysql -u root -e "ALTER USER root@localhost IDENTIFIED BY '$DB_PASS';"
-# mysql -u root -p"$DB_PASS" -e 'FLUSH PRIVILEGES;'
+mysql -u root -p"$DB_PASS" -e 'FLUSH PRIVILEGES;'
 php /www/artisan key:generate --force
 php /www/artisan migrate:fresh --force
 php /www/artisan db:seed --force

@@ -27,7 +27,7 @@ class GamePasswordRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if ($value !== $this->gamePassword) {
+        if ((int) $value !== $this->gamePassword) {
             $fail(Lang::get('Invalid pin code'));
         }
     }

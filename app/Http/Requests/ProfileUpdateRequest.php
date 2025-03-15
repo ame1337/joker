@@ -21,7 +21,7 @@ class ProfileUpdateRequest extends FormRequest
                 'string',
                 'min:3',
                 'max:50',
-                'not_regex:/[^a-zA-Z0-9ა-ჰ_]/i',
+                'not_regex:/[^a-zA-Z0-9_]/',
                 Rule::unique(User::class)->ignore($this->user()->id)
             ],
             'email' => [

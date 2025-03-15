@@ -207,5 +207,7 @@ export default {
         }, (error) => {
             return Promise.reject(error);
         });
+
+        $('html').css('overflow', 'hidden');
     }
 }

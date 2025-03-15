@@ -41,10 +41,6 @@ Route::group(['middleware' => ['auth', 'disconnected']], function () {
     Route::post('/message/games/{game}', [GamesController::class, 'message'])->middleware('throttle:15,1');
 });
 
-Route::get('/dashboard', function () {
-    return redirect('lobby');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
