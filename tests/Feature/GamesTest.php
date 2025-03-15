@@ -4,32 +4,30 @@ namespace Tests\Feature;
 
 use App\Events\GetReadyEvent;
 use App\Events\UpdateLobbyEvent;
-use App\Game;
-use App\Score;
+use App\Models\Game;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class GamesTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
-    /** @test */
-    public function guests_cannot_create_games()
+    public function test_guests_cannot_create_games()
     {
         $this->post('/games')->assertRedirect('/login');
     }
 
-    /** @test */
-    public function guests_cannot_join_games()
+    public function test_guests_cannot_join_games()
     {
-        $game = factory(Game::class)->create();
+        $game = Game::factory()->create();
 
         $this->get($game->path())->assertRedirect('/login');
     }
 
-    /** @test */
-    public function authenticated_users_can_create_games_and_the_creator_is_added_as_a_player_0()
+    public function test_authenticated_users_can_create_games_and_the_creator_is_added_as_a_player_0()
     {
         $this->signIn();
 
@@ -50,16 +48,15 @@ class GamesTest extends TestCase
         Event::assertDispatched(UpdateLobbyEvent::class);
     }
 
-    /** @test */
-    public function game_can_be_started_only_by_the_creator()
+    public function test_game_can_be_started_only_by_the_creator()
     {
-        $game = factory('App\Game')->create();
+        $game = Game::factory()->create();
         $user = $this->signIn();
 
         $game->addPlayer($game->creator);
         $game->addPlayer($user);
-        $game->addPlayer(factory('App\User')->create());
-        $game->addPlayer(factory('App\User')->create());
+        $game->addPlayer(User::factory()->create());
+        $game->addPlayer(User::factory()->create());
 
         $this->post('/start' . $game->path())->assertStatus(403);
 
@@ -72,20 +69,18 @@ class GamesTest extends TestCase
         Event::assertDispatched(GetReadyEvent::class);
     }
 
-    /** @test */
-    public function game_cannot_be_started_until_4_players()
+    public function test_game_cannot_be_started_until_4_players()
     {
-        $game = factory('App\Game')->create();
+        $game = Game::factory()->create();
         $game->addPlayer($game->creator);
         $this->signIn($game->creator);
 
         $this->post('/start' . $game->path())->assertStatus(406);
     }
 
-    /** @test */
-    public function a_player_can_choose_trump()
+    public function test_a_player_can_choose_trump()
     {
-        $game = factory('App\Game')->create(['type' => 9, 'state' => 'trump']);
+        $game = Game::factory()->create(['type' => 9, 'state' => 'trump']);
         $game->addPlayer($game->creator);
         $this->signIn($game->creator);
 
@@ -95,11 +90,10 @@ class GamesTest extends TestCase
         $this->assertEquals(['strength' => 14, 'suit' => 'hearts'], $game->fresh()->trump);
     }
 
-    /** @test */
-    public function authenticated_users_can_join_games()
+    public function test_authenticated_users_can_join_games()
     {
-        $user = factory('App\User')->create();
-        $game = factory('App\Game')->create(['user_id' => $user->id, 'state' => 'start']);
+        $user = User::factory()->create();
+        $game = Game::factory()->create(['user_id' => $user->id, 'state' => 'start']);
         $game->addPlayer($user);
 
         $this->signIn();
@@ -110,14 +104,13 @@ class GamesTest extends TestCase
         Event::assertDispatched(UpdateLobbyEvent::class);
     }
 
-    /** @test */
-    public function a_player_can_call()
+    public function test_a_player_can_call()
     {
-        $game = factory('App\Game')->create(['state' => 'call', 'quarter' => 1]);
+        $game = Game::factory()->create(['state' => 'call', 'quarter' => 1]);
         $game->addPlayer($game->creator);
-        $game->addPlayer(factory('App\User')->create());
-        $game->addPlayer(factory('App\User')->create());
-        $game->addPlayer(factory('App\User')->create());
+        $game->addPlayer(User::factory()->create());
+        $game->addPlayer(User::factory()->create());
+        $game->addPlayer(User::factory()->create());
 
         $game->players->each(function ($player) use ($game) {
             $game->scores()->create([
@@ -130,15 +123,13 @@ class GamesTest extends TestCase
 
         $this->postJson('/call' . $game->path(), ['call' => 1])->assertStatus(200);
         $this->assertEquals(1, $game->players[0]->scores[0]->getData('call', 1, 1));
-        //$this->assertEquals(1, Score::where('player_id', '1')->get()[0]['data']['q_1'][0]['call']);
     }
 
-    /** @test */
-    public function a_player_can_play_a_card()
+    public function test_a_player_can_play_a_card()
     {
-        $game = factory('App\Game')->create(['state' => 'card']);
+        $game = Game::factory()->create(['state' => 'card']);
         $game->addPlayer($game->creator);
-        $game->addPlayer(factory('App\User')->create());
+        $game->addPlayer(User::factory()->create());
 
         $this->signIn($game->creator);
 
@@ -147,12 +138,11 @@ class GamesTest extends TestCase
         $this->postJson('/card' . $game->path(), ['card' => ['strength' => 9, 'suit' => 'hearts']])->assertOk();
     }
 
-    /** @test */
-    public function check_take_updates_turn_if_not_4_cards()
+    public function test_check_take_updates_turn_if_not_4_cards()
     {
         $user = $this->signIn();
 
-        $game = factory('App\Game')->create(['user_id' => $user->id, 'cards' => [['strength' => 14, 'suit' => 'hearts']]]);
+        $game = Game::factory()->create(['user_id' => $user->id, 'cards' => [['strength' => 14, 'suit' => 'hearts']]]);
         $game->refresh();
         Event::fake();
         $this->assertEquals(0, $game->turn);
@@ -162,14 +152,13 @@ class GamesTest extends TestCase
         $this->assertEquals(1, $game->fresh()->turn);
     }
 
-    /** @test */
-    public function calculates_scores_after_each_hand()
+    public function test_calculates_scores_after_each_hand()
     {
-        $game = factory('App\Game')->create(['type' => 9]);
+        $game = Game::factory()->create(['type' => 9]);
         $game->addPlayer($game->creator);
-        $game->addPlayer(factory('App\User')->create());
-        $game->addPlayer(factory('App\User')->create());
-        $game->addPlayer(factory('App\User')->create());
+        $game->addPlayer(User::factory()->create());
+        $game->addPlayer(User::factory()->create());
+        $game->addPlayer(User::factory()->create());
         $game->refresh();
 
         $game->players->each(function ($player) use ($game) {
@@ -196,16 +185,15 @@ class GamesTest extends TestCase
         $this->assertEquals(-200, $game->fresh()->scores[3]->getData('result', 1, 1));
     }
 
-    /** @test */
-    public function admin_can_deal_specific_cards_for_next_deal()
+    public function test_admin_can_deal_specific_cards_for_next_deal()
     {
-        $admin = factory('App\User')->create(['email' => 'admin@joker.local']);
+        $admin = User::factory()->create(['email' => 'admin@joker.local']);
 
-        $game = factory('App\Game')->create(['type' => 9, 'state' => 'card']);
+        $game = Game::factory()->create(['type' => 9, 'state' => 'card']);
         $game->addPlayer($game->creator);
-        $game->addPlayer(factory('App\User')->create());
-        $game->addPlayer(factory('App\User')->create());
-        $game->addPlayer(factory('App\User')->create());
+        $game->addPlayer(User::factory()->create());
+        $game->addPlayer(User::factory()->create());
+        $game->addPlayer(User::factory()->create());
 
         $this->signIn($admin);
 
@@ -214,11 +202,12 @@ class GamesTest extends TestCase
             'cards' => [['strength' => 16, 'suit' => 'black_joker'], ['strength' => 14, 'suit' => 'hearts']]
         ])->assertOK();
 
-        $game->refresh();
         Event::fake();
+        $game->refresh();
 
         $game->deal();
 
+        $this->assertContains(['strength' => 16, 'suit' => 'black_joker'], $game->players[1]->cards);
         $this->assertContains(['strength' => 14, 'suit' => 'hearts'], $game->players[1]->cards);
     }
 }

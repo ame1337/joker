@@ -3,16 +3,18 @@
 namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use App\Models\Score;
+use App\Models\User;
 
 class ScoreTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
-    /** @test */
-    public function it_can_create_call()
+    public function test_it_can_create_call()
     {
-        $score = factory('App\Score')->create();
+        $score = Score::factory()->create();
         $score->refresh();
 
         $score->createCall(1, 1);
@@ -20,10 +22,9 @@ class ScoreTest extends TestCase
         $this->assertEquals(1, $score->data['q_1'][0]['call']);
     }
 
-    /** @test */
-    public function it_can_get_call()
+    public function test_it_can_get_call()
     {
-        $score = factory('App\Score')->create();
+        $score = Score::factory()->create();
         $score->refresh();
 
         $score->createCall(1, 1);
@@ -31,10 +32,9 @@ class ScoreTest extends TestCase
         $this->assertEquals(1, $score->getData('call', 1, 1));
     }
 
-    /** @test */
-    public function it_can_increment_take()
+    public function test_it_can_increment_take()
     {
-        $score = factory('App\Score')->create();
+        $score = Score::factory()->create();
         $score->refresh();
 
         $score->createCall(1, 1);
@@ -44,16 +44,15 @@ class ScoreTest extends TestCase
         $this->assertEquals(1, $score->getData('take', 1, 1));
     }
 
-    /** @test */
-    public function game_gets_except_attribute_correctly_from_scores()
+    public function test_game_gets_except_attribute_correctly_from_scores()
     {
-        $score = factory('App\Score')->create();
+        $score = Score::factory()->create();
         $score->refresh();
         $score->createCall(1, 3);
         $game = $score->game;
-        $game->addPlayer($user = factory('App\User')->create());
+        $game->addPlayer($user = User::factory()->create());
         $game->scores()->create(['player_id' => $user->player->id, 'position' => 1]);
-        $score2 = \App\Score::find(2);
+        $score2 = Score::find(2);
         $score2->createCall(1, 3);
         $game->refresh();
         $game->type = 9;
@@ -61,10 +60,9 @@ class ScoreTest extends TestCase
         $this->assertEquals(3, $game->except);
     }
 
-    /** @test */
-    public function it_can_update_data()
+    public function test_it_can_update_data()
     {
-        $score = factory('App\Score')->create();
+        $score = Score::factory()->create();
         $score->refresh();
 
         $score->createCall(1, 3);

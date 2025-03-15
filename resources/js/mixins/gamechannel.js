@@ -197,5 +197,15 @@ export default {
                     el.scrollTo(0, el.scrollHeight);
                 });
             });
+        
+        window.axios.interceptors.request.use((config) => {
+            let socketId = Echo.socketId();
+            if (socketId) {
+                config.headers['X-Socket-ID'] = socketId;
+            }
+            return config;
+        }, (error) => {
+            return Promise.reject(error);
+        });
     }
 }

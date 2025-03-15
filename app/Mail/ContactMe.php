@@ -5,33 +5,49 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class ContactMe extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $name, $email, $message;
-
     /**
      * Create a new message instance.
-     *
-     * @return void
      */
-    public function __construct($name, $email, $message)
+    public function __construct(public $name, public $email, public $message)
     {
-        $this->name = $name;
-        $this->email = $email;
-        $this->message = $message;
+        //
     }
 
     /**
-     * Build the message.
-     *
-     * @return $this
+     * Get the message envelope.
      */
-    public function build()
+    public function envelope(): Envelope
     {
-        return $this->markdown('emails.contact-me');
+        return new Envelope(
+            subject: 'Message from the contact form',
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        return new Content(
+            markdown: 'mail.contact-me',
+        );
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        return [];
     }
 }

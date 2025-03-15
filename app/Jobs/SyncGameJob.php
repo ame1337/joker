@@ -8,7 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Events\SyncGameStateEvent;
-use App\Game;
+use App\Models\Game;
 
 class SyncGameJob implements ShouldQueue
 {

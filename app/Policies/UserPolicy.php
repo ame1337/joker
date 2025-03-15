@@ -2,20 +2,17 @@
 
 namespace App\Policies;
 
-use App\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Models\User;
 
 class UserPolicy
 {
-    use HandlesAuthorization;
-
     /**
      * Determine whether the user can update profile
      * @param User $user
      * @param User $requestUser
-     * @return boolean
+     * @return bool
      */
-    public function update(User $user, User $requestUser)
+    public function update(User $user, User $requestUser): bool
     {
         return $user->id === $requestUser->id && ! $user->socialite_account;
     }

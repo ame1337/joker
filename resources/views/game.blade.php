@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('joker.app')
 
 @section('style')
     <link href="{{ asset('css/cards.css') }}" rel="stylesheet">

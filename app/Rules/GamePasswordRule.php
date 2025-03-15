@@ -2,10 +2,11 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Lang;
 
-class GamePasswordRule implements Rule
+class GamePasswordRule implements ValidationRule
 {
     private $gamePassword;
 
@@ -20,24 +21,14 @@ class GamePasswordRule implements Rule
     }
 
     /**
-     * Determine if the validation rule passes.
+     * Run the validation rule.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
+     * @param  \Closure(string, ?string=): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
-    public function passes($attribute, $value)
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        return $value === $this->gamePassword;
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
-    {
-        return Lang::get('Invalid pin code');
+        if ($value !== $this->gamePassword) {
+            $fail(Lang::get('Invalid pin code'));
+        }
     }
 }

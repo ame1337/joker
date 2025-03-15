@@ -1,16 +1,28 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use App\Score;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Game;
 
-$factory->define(Score::class, function (Faker $faker) {
-    $game = factory('App\Game')->create();
-    $game->addPlayer($game->creator);
-    return [
-        'player_id' => $game->creator->player->id,
-        'game_id' => $game->id,
-        'position' => 0
-    ];
-});
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Score>
+ */
+class ScoreFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        $game = Game::factory()->create();
+        $game->addPlayer($game->creator);
+        return [
+            'player_id' => $game->creator->player->id,
+            'game_id' => $game->id,
+            'position' => 0
+        ];
+    }
+}

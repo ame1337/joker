@@ -2,22 +2,19 @@
 
 namespace App\Policies;
 
-use App\Game;
-use App\User;
-use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Models\Game;
+use App\Models\User;
 
 class GamePolicy
 {
-    use HandlesAuthorization;
-
     /**
      * Determine whether the user can start a game.
      *
      * @param User $user
      * @param Game $game
-     * @return mixed
+     * @return bool
      */
-    public function start(User $user, Game $game)
+    public function start(User $user, Game $game): bool
     {
         return $user->is($game->creator) && $game->state === 'start';
     }
@@ -27,9 +24,9 @@ class GamePolicy
      *
      * @param User $user
      * @param Game $game
-     * @return mixed
+     * @return bool
      */
-    public function ready(User $user, Game $game)
+    public function ready(User $user, Game $game): bool
     {
         return $game->players->contains($user->player)
             && $user->isNot($game->creator)
@@ -42,9 +39,9 @@ class GamePolicy
      *
      * @param  User  $user
      * @param  Game  $game
-     * @return mixed
+     * @return bool
      */
-    public function trump(User $user, Game $game)
+    public function trump(User $user, Game $game): bool
     {
         return $game->players->contains($user->player) && $user->player->position === $game->turn && $game->state === 'trump' && !$user->disconnected;
     }
@@ -54,9 +51,9 @@ class GamePolicy
      *
      * @param User $user
      * @param Game $game
-     * @return mixed
+     * @return bool
      */
-    public function card(User $user, Game $game)
+    public function card(User $user, Game $game): bool
     {
         return $game->players->contains($user->player) && $user->player->position === $game->turn && $game->state === 'card' && !$user->disconnected;
     }
@@ -66,9 +63,9 @@ class GamePolicy
      *
      * @param  User  $user
      * @param  Game  $game
-     * @return mixed
+     * @return bool
      */
-    public function call(User $user, Game $game)
+    public function call(User $user, Game $game): bool
     {
         return $game->players->contains($user->player) && $user->player->position === $game->turn && $game->state === 'call' && !$user->disconnected;
     }
@@ -78,9 +75,9 @@ class GamePolicy
      *
      * @param  User  $user
      * @param  Game  $game
-     * @return mixed
+     * @return bool
      */
-    public function leave(User $user, Game $game)
+    public function leave(User $user, Game $game): bool
     {
         return $game->players->contains($user->player);
     }
@@ -90,9 +87,9 @@ class GamePolicy
      *
      * @param User $user
      * @param Game $game
-     * @return mixed
+     * @return bool
      */
-    public function kick(User $user, Game $game)
+    public function kick(User $user, Game $game): bool
     {
         return ($user->is($game->creator) || $user->isAdmin) && $game->state === 'start';
     }
@@ -100,11 +97,11 @@ class GamePolicy
     /**
      * Determine whether the user can join the game.
      *
-     * @param  \App\User  $user
+     * @param  User  $user
      * @param  Game $game
-     * @return mixed
+     * @return bool
      */
-    public function join(User $user, Game $game)
+    public function join(User $user, Game $game): bool
     {
         return ! in_array($user->id, $game->kicked_users);
     }
@@ -112,11 +109,11 @@ class GamePolicy
     /**
      * Determine whether the user can activate the bot.???
      *
-     * @param  \App\User  $user
+     * @param  User  $user
      * @param Game $game
-     * @return mixed
+     * @return bool
      */
-    public function bot(User $user, Game $game)
+    public function bot(User $user, Game $game): bool
     {
         $states = ['trump', 'call', 'card'];
         return !$user->player->has_bot_kicked
@@ -129,11 +126,11 @@ class GamePolicy
     /**
      * Determine whether the user can broadcast a message.
      *
-     * @param \App\User $user
+     * @param User $user
      * @param Game $game
-     * @return mixed
+     * @return bool
      */
-    public function message(User $user, Game $game)
+    public function message(User $user, Game $game): bool
     {
         return $game->players->contains($user->player) ||
             $game->scores->contains('player_id', $user->player->id);

@@ -1,25 +1,30 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 # install packages
-RUN apt update \
-    && apt install -y nginx php7.4 php7.4-fpm vim unzip php7.4-bcmath \
-    php7.4-mbstring php7.4-xml php7.4-mysql php7.4-sqlite3 php7.4-curl \
-    composer mariadb-server golang-go net-tools supervisor curl
+RUN apt update && \
+    apt install -y nginx php php-fpm php-xml php-dom php-curl \
+    php-bcmath php-mysql php-sqlite3 composer mariadb-server \
+    golang-go nodejs npm net-tools vim curl supervisor
 
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt install -y nodejs
+RUN go install github.com/mailhog/MailHog@latest
 
 RUN openssl req -nodes -new -x509 -keyout /etc/ssl/certs/joker.local.key -out \
     /etc/ssl/certs/joker.local.crt -subj "/C=GE/ST=State/L=City/O=Organization/OU=Unit/CN=joker"
 
-RUN go get github.com/mailhog/MailHog
-
 # copy files
-COPY dockerconf/bashrc /root/.bashrc
-COPY dockerconf/supervisord.conf /etc/supervisor/supervisord.conf
-COPY --chown=root:root dockerconf/entrypoint.sh /entrypoint.sh
+COPY docker/bashrc /root/.bashrc
+COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
+COPY --chown=root:root docker/entrypoint.sh /entrypoint.sh
+COPY docker/nginx.conf /etc/nginx/sites-available/joker.local
 
-WORKDIR /var/www/joker
+# configure nginx, php and mysql
+RUN rm /etc/nginx/sites-enabled/default
+RUN ln -s /etc/nginx/sites-available/joker.local /etc/nginx/sites-enabled/joker.local
+RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php/8.2/fpm/php.ini
+RUN sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/8.2/fpm/php.ini
+RUN sed -i 's/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
+
+WORKDIR /www
 
 EXPOSE 80
 EXPOSE 443

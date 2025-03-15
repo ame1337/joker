@@ -6,19 +6,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
+use App\Models\Game;
+use App\Models\User;
 
 class ScoresTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function when_game_starts_empty_scores_are_created()
+    public function test_when_game_starts_empty_scores_are_created()
     {
-        $game = factory('App\Game')->create();
+        $game = Game::factory()->create();
         $game->addPlayer($game->creator);
-        $game->addPlayer(factory('App\User')->create());
-        $game->addPlayer(factory('App\User')->create());
-        $game->addPlayer(factory('App\User')->create());
+        $game->addPlayer(User::factory()->create());
+        $game->addPlayer(User::factory()->create());
+        $game->addPlayer(User::factory()->create());
 
         Event::fake();
         Queue::fake();
@@ -27,15 +28,14 @@ class ScoresTest extends TestCase
         $this->assertDatabaseCount('scores', 4);
     }
 
-    /** @test */
-    public function when_user_calls_score_is_updated()
+    public function test_when_user_calls_score_is_updated()
     {
         $this->withoutExceptionHandling();
-        $game = factory('App\Game')->create(['state' => 'call']);
+        $game = Game::factory()->create(['state' => 'call']);
         $game->addPlayer($game->creator);
-        $game->addPlayer(factory('App\User')->create());
-        $game->addPlayer(factory('App\User')->create());
-        $game->addPlayer(factory('App\User')->create());
+        $game->addPlayer(User::factory()->create());
+        $game->addPlayer(User::factory()->create());
+        $game->addPlayer(User::factory()->create());
 
         $this->signIn($game->creator);
         Event::fake();

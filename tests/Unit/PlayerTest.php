@@ -4,15 +4,15 @@ namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\Game;
 
 class PlayerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function it_can_determine_highest_card_of_suit_in_players_cards_and_if_suit_is_in_cards()
+    public function test_it_can_determine_highest_card_of_suit_in_players_cards_and_if_suit_is_in_cards()
     {
-        $game = factory('App\Game')->create();
+        $game = Game::factory()->create();
         $game->addPlayer($game->creator);
 
         $cards = [
@@ -34,10 +34,9 @@ class PlayerTest extends TestCase
         $this->assertFalse($player->suitNotInCards('hearts'));
     }
 
-    /** @test */
-    public function it_can_determine_if_player_can_play_a_card_aka_cvetaoba()
+    public function test_it_can_determine_if_player_can_play_a_card_aka_cvetaoba()
     {
-        $game = factory('App\Game')->create();
+        $game = Game::factory()->create();
         $game->addPlayer($game->creator);
 
         $cards = [
@@ -91,10 +90,9 @@ class PlayerTest extends TestCase
         ));
     }
 
-    /** @test */
-    public function it_can_remove_a_card()
+    public function test_it_can_remove_a_card()
     {
-        $game = factory('App\Game')->create();
+        $game = Game::factory()->create();
         $game->addPlayer($game->creator);
 
         $cards = [

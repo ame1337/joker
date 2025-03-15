@@ -2,8 +2,8 @@
 
 namespace App\Broadcasting;
 
-use App\Game;
-use App\User;
+use App\Models\Game;
+use App\Models\User;
 
 class GameChannel
 {

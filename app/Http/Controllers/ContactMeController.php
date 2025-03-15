@@ -22,7 +22,7 @@ class ContactMeController extends Controller
             'message' => 'required|min:10'
         ]);
 
-        Mail::to('admin@joker.local')
+        Mail::to('contact@joker.local')
             ->send(new ContactMe($request->name, $request->email, $request->message));
 
         return redirect('/contact')->with('status', Lang::get('Message sent'));

@@ -9,19 +9,18 @@ use App\Events\PlayerCallEvent;
 use App\Events\GetReadyEvent;
 use App\Events\PlayerJoinLeaveEvent;
 use App\Events\PlayerKickedEvent;
-use App\Events\UpdateGameEvent;
 use App\Events\UpdateLobbyEvent;
 use App\Events\UpdateReadyEvent;
 use App\Events\UpdateTrumpEvent;
-use App\Game;
+use App\Models\Game;
 use App\Jobs\PlayerBotJob;
-use App\Jobs\WShelperJob;
 use App\Jobs\ResetGameStartJob;
-use App\PlayerBot;
+use App\Models\PlayerBot;
 use App\Rules\CardRule;
 use App\Rules\GamePasswordRule;
 use App\Rules\KickUserRule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 // bad design move front-end calls to websockets and reinvent botplay...
 class GamesController extends Controller
@@ -33,7 +32,7 @@ class GamesController extends Controller
      */
     public function start(Game $game)
     {
-        $this->authorize('start', $game);
+        Gate::authorize('start', $game);
 
         if (! ($game->players->count() === 4)) {
             abort(406, 'Not enough players');
@@ -50,7 +49,7 @@ class GamesController extends Controller
 
     public function ready(Request $request, Game $game)
     {
-        $this->authorize('ready', $game);
+        Gate::authorize('ready', $game);
 
         $request->validate(['ready' => ['required', 'boolean']]);
 
@@ -72,7 +71,7 @@ class GamesController extends Controller
      */
     public function trump(Request $request, Game $game)
     {
-        $this->authorize('trump', $game);
+        Gate::authorize('trump', $game);
 
         $request->validate([
             'trump' => ['required', 'in:hearts,clubs,diamonds,spades,bez']
@@ -105,7 +104,7 @@ class GamesController extends Controller
      */
     public function call(Request $request, Game $game)
     {
-        $this->authorize('call', $game);
+        Gate::authorize('call', $game);
 
         $max = $game->numCardsToDeal();
         $except = $game->exceptCall();
@@ -138,7 +137,7 @@ class GamesController extends Controller
      */
     public function card(Request $request, Game $game)
     {
-        $this->authorize('card', $game);
+        Gate::authorize('card', $game);
 
         $request->validate([
             'card' => ['required', 'array', new CardRule],
@@ -256,7 +255,7 @@ class GamesController extends Controller
         // related to disconnection logic in websockets handler
         sleep(3);
         $game->refresh();
-        $this->authorize('join', $game);
+        Gate::authorize('join', $game);
 
         $game->makeVisible('password');
 
@@ -297,7 +296,7 @@ class GamesController extends Controller
     }
 
     public function kick(Request $request, Game $game) {
-        $this->authorize('kick', $game);
+        Gate::authorize('kick', $game);
 
         $request->validate([
             'position' => ['required', new KickUserRule($game->players)]
@@ -315,7 +314,7 @@ class GamesController extends Controller
 
     public function message(Request $request, Game $game)
     {
-        $this->authorize('message', $game);
+        Gate::authorize('message', $game);
 
         $request->validate([
             'message' => ['required', 'string']
@@ -328,7 +327,7 @@ class GamesController extends Controller
 
     public function bot(Game $game)
     {
-        $this->authorize('bot', $game);
+        Gate::authorize('bot', $game);
 
         $bot = new PlayerBot(auth()->user()->player, $game);
         $method = $game->state;

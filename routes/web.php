@@ -1,51 +1,54 @@
 <?php
 
+use App\Http\Controllers\Auth\SocialiteLoginController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ContactMeController;
+use App\Http\Controllers\GamesController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\AdminsController;
 use Illuminate\Support\Facades\Route;
-use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
-WebSocketsRouter::webSocket('/joker', \App\JokerWebSocketHandler::class);
-Auth::routes(['verify' => true]);
-
-Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->where('provider','facebook|google');
-Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->where('provider','facebook|google');
+Route::middleware('guest')->group(function () {
+    Route::get('login/{provider}', [SocialiteLoginController::class, 'redirectToProvider'])->where('provider','facebook|google');
+    
+    Route::get('login/{provider}/callback', [SocialiteLoginController::class, 'handleProviderCallback'])->where('provider','facebook|google'); 
+});
 
 Route::view('/', 'home')->name('home')->middleware('disconnected');
-Route::get('/contact', 'ContactMeController@index');
-Route::post('/contact', 'ContactMeController@store')->name('contact');
-Route::get('/user/{user}', 'UsersController@show');
+Route::get('/contact', [ContactMeController::class, 'index']);
+Route::post('/contact', [ContactMeController::class, 'store'])->name('contact');
+Route::get('/user/{user}', [UsersController::class, 'show']);
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/lobby', 'GamesController@index')->name('lobby')->middleware('verified');
-    Route::get('/email/change', 'UsersController@emailChangeForm')->middleware('password.confirm');
-    Route::post('/email/change', 'UsersController@emailChange')->middleware('password.confirm');
-    Route::get('/password/change', 'UsersController@passwordChangeForm')->middleware('password.confirm');
-    Route::post('/password/change', 'UsersController@passwordChange')->middleware('password.confirm');
-    Route::post('/admin/start/games/{game}', 'AdminsController@start');
-    Route::post('/admin/cards/games/{game}', 'AdminsController@cards');
-    Route::post('/admin/addbot/games/{game}', 'AdminsController@addbot');
+    Route::get('/lobby', [GamesController::class, 'index'])->name('lobby')->middleware('verified');
+    Route::post('/admin/start/games/{game}', [AdminsController::class, 'start']);
+    Route::post('/admin/cards/games/{game}', [AdminsController::class, 'cards']);
+    Route::post('/admin/addbot/games/{game}', [AdminsController::class, 'addbot']);
 });
 
 Route::group(['middleware' => ['auth', 'disconnected']], function () {
-    Route::get('/games/{game}', 'GamesController@show')->middleware('verified');
-    Route::post('/games', 'GamesController@store')->middleware('verified');
-    Route::post('/join/games/{game}', 'GamesController@join');
-    Route::post('/start/games/{game}', 'GamesController@start');
-    Route::post('/ready/games/{game}', 'GamesController@ready');
-    Route::post('/call/games/{game}', 'GamesController@call');
-    Route::post('/card/games/{game}', 'GamesController@card');
-    Route::post('/trump/games/{game}', 'GamesController@trump');
-    Route::post('/kick/games/{game}', 'GamesController@kick');
-    Route::post('/leave/games/{game}', 'GamesController@leave');
-    Route::post('/bot/games/{game}', 'GamesController@bot');
-    Route::post('/message/games/{game}', 'GamesController@message')->middleware('throttle:15,1');
+    Route::get('/games/{game}', [GamesController::class, 'show'])->middleware('verified');
+    Route::post('/games', [GamesController::class, 'store'])->middleware('verified');
+    Route::post('/join/games/{game}', [GamesController::class, 'join']);
+    Route::post('/start/games/{game}', [GamesController::class, 'start']);
+    Route::post('/ready/games/{game}', [GamesController::class, 'ready']);
+    Route::post('/call/games/{game}', [GamesController::class, 'call']);
+    Route::post('/card/games/{game}', [GamesController::class, 'card']);
+    Route::post('/trump/games/{game}', [GamesController::class, 'trump']);
+    Route::post('/kick/games/{game}', [GamesController::class, 'kick']);
+    Route::post('/leave/games/{game}', [GamesController::class, 'leave']);
+    Route::post('/bot/games/{game}', [GamesController::class, 'bot']);
+    Route::post('/message/games/{game}', [GamesController::class, 'message'])->middleware('throttle:15,1');
 });
+
+Route::get('/dashboard', function () {
+    return redirect('lobby');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

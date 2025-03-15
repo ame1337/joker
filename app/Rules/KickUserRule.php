@@ -2,9 +2,10 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class KickUserRule implements Rule
+class KickUserRule implements ValidationRule
 {
     private $players;
 
@@ -19,24 +20,14 @@ class KickUserRule implements Rule
     }
 
     /**
-     * Determine if the validation rule passes.
+     * Run the validation rule.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
+     * @param  \Closure(string, ?string=): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
-    public function passes($attribute, $value)
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        return $this->players->has($value) && $value != auth()->user()->player->position;
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
-    {
-        return 'Error';
+        if (!$this->players->has($value) || $value === auth()->user()->player->position) {
+            $fail('bad :attribute value');
+        }
     }
 }
