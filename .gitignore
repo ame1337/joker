@@ -23,3 +23,6 @@ yarn-error.log
 /.zed
 .DS_Store
 /build_docker.sh
+/public/js/app.js
+/public/css/app.css
+/public/fonts
