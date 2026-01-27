@@ -4,15 +4,12 @@ FROM debian:bookworm
 RUN apt update && \
     apt install -y nginx php php-fpm php-xml php-dom php-curl \
     php-bcmath php-mysql php-sqlite3 composer mariadb-server \
-    golang-go nodejs npm net-tools vim curl supervisor
-
-RUN go install github.com/mailhog/MailHog@latest
+    nodejs npm net-tools vim curl supervisor
 
 RUN openssl req -nodes -new -x509 -keyout /etc/ssl/certs/joker.local.key -out \
     /etc/ssl/certs/joker.local.crt -subj "/C=GE/ST=State/L=City/O=Organization/OU=Unit/CN=joker"
 
 # copy files
-COPY docker/bashrc /root/.bashrc
 COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
 COPY --chown=root:root docker/entrypoint.sh /entrypoint.sh
 COPY docker/nginx.conf /etc/nginx/sites-available/joker.local

@@ -120,7 +120,7 @@ class GamesTest extends TestCase
         });
 
         $this->signIn($game->creator);
-
+        Event::fake();
         $this->postJson('/call' . $game->path(), ['call' => 1])->assertStatus(200);
         $this->assertEquals(1, $game->players[0]->scores[0]->getData('call', 1, 1));
     }

@@ -3,7 +3,7 @@ chmod 700 /entrypoint.sh
 
 # install dependencies
 cp .env.example .env
-php artisan storage:link && composer install && npm install && npm run dev
+composer install && npm install && npm run dev
 
 REVERB_SECRET="$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)"
 sed -i "s/REVERB_APP_SECRET=/REVERB_APP_SECRET=$REVERB_SECRET/" /www/.env
@@ -18,6 +18,9 @@ mysql -u root -e 'CREATE DATABASE IF NOT EXISTS joker;'
 DB_PASS="$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)"
 mysql -u root -e "ALTER USER root@localhost IDENTIFIED BY '$DB_PASS';"
 mysql -u root -p"$DB_PASS" -e 'FLUSH PRIVILEGES;'
+sed -i "s/DB_PASSWORD=/DB_PASSWORD=$DB_PASS/" /www/.env
+
+php artisan storage:link
 php /www/artisan key:generate --force
 php /www/artisan migrate:fresh --force
 php /www/artisan db:seed --force
