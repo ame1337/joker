@@ -15,7 +15,7 @@ Multiplayer online card game powered by Laravel and Bootstrap. Cheater admin and
 7. `php artisan db:seed` [users](database/seeders/DatabaseSeeder.php) password is _password_
 8. `php artisan queue:listen`
 9. `php artisan websockets:serve`
-10. Step 6, or register, confirm links at /mailhog and play!
+10. Step 6, or register and play! Verification links are logged in storage/logs/mail.log
 
 or use docker:
 ```
