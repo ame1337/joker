@@ -11,7 +11,7 @@ sed -i "s/REVERB_APP_SECRET=/REVERB_APP_SECRET=$REVERB_SECRET/" /www/.env
 # permission for writing to storage
 chown -R www-data:www-data /www/storage
 
-mysqld_safe &
+mariadbd-safe &
 while ! mysqladmin ping -h'localhost' --silent; do echo 'mysqld is down' && sleep .2; done
 
 mysql -u root -e 'CREATE DATABASE IF NOT EXISTS joker;'
