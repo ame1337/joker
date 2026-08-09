@@ -42,7 +42,7 @@
 
 <script>
     import translate from '../mixins/translate';
-    import game from './Game';
+    import game from './Game.vue';
 
     export default {
         components: { game },

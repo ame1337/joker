@@ -1,3 +1,5 @@
+import { Popover } from 'bootstrap';
+
 export default {
     created() {
         Echo.private('game.' + this.game.id)
@@ -66,11 +68,25 @@ export default {
                 let content = event.score.call === 0 ? '-' : event.score.call;
 
                 if (p !== 0) {
-                    $('#player' + p).attr('data-bs-content', String(content));
-                    $('#player' + p).popover('show');
-                    setTimeout(() => {
-                        $('#player' + p).popover('dispose');
-                    }, 2000);
+                    const popoverElement = $('#player' + p)[0];
+                    if (popoverElement) {
+                        const existingPopover = Popover.getInstance(popoverElement);
+
+                        if (existingPopover) {
+                            existingPopover.dispose();
+                        }
+
+                        const popover = new Popover(popoverElement, {
+                            content: String(content),
+                            html: true,
+                        });
+
+                        popover.show();
+
+                        setTimeout(() => {
+                            popover.dispose();
+                        }, 2000);
+                    }
                 }
 
                 this.game.scores[event.position].data[`q_${this.game.quarter}`].push(event.score);

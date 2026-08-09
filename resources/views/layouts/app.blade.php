@@ -26,12 +26,8 @@
     @yield('style')
 </head>
 <body>
-    @include('layouts.theme')
+    @yield('nav')
 
-    <div id="app">
-        @yield('nav')
-
-        @yield('content')
-    </div>
+    @yield('content')
 </body>
 </html>

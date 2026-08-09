@@ -18,7 +18,7 @@
                 <i class="fa-solid fa-diamond"></i> @lang('New table')
             </button>
         </div>
-        <lobby :initial-games="{{ json_encode($games)  }}"></lobby>
+        <div id="lobby" data-initial-games="{{ json_encode($games)  }}"></div>
     </div>
 </div></div>
 </div>

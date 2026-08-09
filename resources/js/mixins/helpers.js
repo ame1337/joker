@@ -1,3 +1,5 @@
+import { Popover } from 'bootstrap';
+
 export default {
     data() {
         return {
@@ -177,14 +179,26 @@ export default {
                         $(`#${popoverId}`).hasClass('show');
         
                     if (!isPopoverVisible) {
-                        popoverElement.popover('dispose');
-                        popoverElement.attr('data-bs-content', this.played_card_action_html(n));
-                        popoverElement.popover('show');
+                        Popover.getInstance(popoverElement)?.dispose();
+
+                        const popover = new Popover(popoverElement, {
+                            content: this.played_card_action_html(n),
+                            html: true,
+                        });
+
+                        popover.show();
                     }
                 });
                 return true;
             } else {
-                $(`#player${n}card`).popover('dispose');
+                const element = $(`#player${n}card`)[0];
+                if (!element) {
+                    return;
+                }
+                const popover = Popover.getInstance(element);
+                if (popover) {
+                    popover.dispose()
+                }
                 return false;
             }
         },

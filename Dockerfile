@@ -1,10 +1,14 @@
 FROM debian:trixie
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # install packages
-RUN apt update && apt install -y --no-install-recommends \
+RUN apt update && apt install -y curl ca-certificates --no-install-recommends
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
+RUN apt install -y --no-install-recommends \
     nginx php php-fpm php-xml php-dom php-curl php-bcmath \
-    php-mysql php-sqlite3 php-zip composer mariadb-server nodejs npm \
-    net-tools vim curl supervisor 7zip && rm -rf /var/lib/apt/lists/*
+    php-mysql php-sqlite3 php-zip composer mariadb-server nodejs \
+    net-tools vim supervisor 7zip && apt clean && rm -rf /var/lib/apt/lists/*
 
 RUN openssl req -nodes -new -x509 -keyout /etc/ssl/certs/joker.local.key -out \
     /etc/ssl/certs/joker.local.crt -subj "/C=GE/ST=State/L=City/O=Organization/OU=Unit/CN=joker"

@@ -16,6 +16,7 @@
     </div>
 </div>
 @if (session('status'))
-<flash :message="{{ json_encode(session('status')) }}" :type="{{ json_encode('alert-success') }}"></flash>
+<div id="flash" data-message="{{ json_encode(session('status')) }}"
+    data-type="{{ json_encode('alert-success') }}"></div>
 @endif
 @endsection

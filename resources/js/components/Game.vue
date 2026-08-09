@@ -134,8 +134,8 @@
                 </div>
             </div>
 
-            <div id="start-btn" class="shadow" v-show="showStart">
-                <button class="btn btn-danger btn-block"
+            <div id="start-btn" v-show="showStart">
+                <button class="btn btn-danger btn-block shadow"
                         type="button"
                         @click="start">
                     <small><strong>{{ lang('Start') }}</strong></small>
@@ -281,9 +281,9 @@
 </template>
 
 <script>
-    import scoreboard1 from './Scoreboard1';
-    import scoreboard9 from './Scoreboard9';
-    import chat from './Chat';
+    import scoreboard1 from './Scoreboard1.vue';
+    import scoreboard9 from './Scoreboard9.vue';
+    import chat from './Chat.vue';
     import helpers from '../mixins/helpers';
     import gamechannel from '../mixins/gamechannel';
     import playerchannel from '../mixins/playerchannel';

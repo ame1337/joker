@@ -24,6 +24,9 @@
                 </li>
                 @endauth
             </ul>
+            
+            @include('layouts.theme')
+
             <div class="text-end">
                 <a class="btn btn-outline-primary me-1 rounded-3"
                     href="/{{ Request::path() === '/' ? '' : Request::path() }}?lang={{ App::getLocale() == 'en' ? 'ka' : 'en' }}">
@@ -31,8 +34,6 @@
                 </a>
             </div>
 
-            <theme-changer></theme-changer>
-            
             @guest
             <div class="text-end">
                 <a href="/login" class="btn btn-success me-1 rounded-3"><i class="fa-solid fa-right-to-bracket"></i></a>

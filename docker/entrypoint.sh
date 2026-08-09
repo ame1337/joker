@@ -3,7 +3,7 @@ chmod 700 /entrypoint.sh
 
 # install dependencies
 cp .env.example .env
-composer install && npm install && npm run dev
+composer install && npm install && npm run build
 
 REVERB_SECRET="$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)"
 sed -i "s/REVERB_APP_SECRET=/REVERB_APP_SECRET=$REVERB_SECRET/" /www/.env

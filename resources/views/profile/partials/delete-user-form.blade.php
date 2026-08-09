@@ -11,7 +11,8 @@
             {{ __('DELETE ACCOUNT') }}
         </button>
         @error('password', 'userDeletion')
-        <flash :message="{{ json_encode($message) }}" :type="{{ json_encode('alert-danger') }}"></flash>
+        <div id="flash" data-message="{{ json_encode(session('status')) }}"
+            data-type="{{ json_encode('alert-danger') }}"></div>
         @enderror
         
     </div>
