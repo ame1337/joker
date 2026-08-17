@@ -6,6 +6,8 @@ Multiplayer online card game powered by Laravel and Bootstrap. Cheater admin and
 <img src=joker.png />
 
 ## Usage:
+Add **joker.local** to /etc/hosts e.g. `echo "127.0.0.1\tjoker.local" | sudo tee -a /etc/hosts`
+
 1. Clone this repository
 2. `cd joker && cp .env.example .env`
 3. `composer install`
